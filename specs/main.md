@@ -25,3 +25,7 @@ We are based in Greater Toronto Area and naturally our focus is primary GTA. But
 ## SEO
 
 Try to suggest/implement elements that make the website as SEO friendly as possible.
+
+## Serving
+
+Use `livereload -p 8000` on local virtual env to serve the webpage
