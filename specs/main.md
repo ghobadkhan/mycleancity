@@ -28,4 +28,6 @@ Try to suggest/implement elements that make the website as SEO friendly as possi
 
 ## Serving
 
-Use `livereload -p 8000` on local virtual env to serve the webpage
+Install dependencies with `npm install`, then run `npm start` to serve the Angular app locally.
+
+Run `npm run build` to create a production build in `dist/my-clean-city`.
