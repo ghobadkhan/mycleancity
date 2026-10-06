@@ -1,4 +1,5 @@
-const themeSelect = document.querySelector("#theme-preference");
+const themeMenu = document.querySelector("#theme-menu");
+const themeOptions = [...themeMenu.querySelectorAll("[data-theme-option]")];
 const savedPreferenceKey = "my-clean-city-theme";
 const splash = document.querySelector("#campaign-splash");
 const splashOptOut = document.querySelector("#splash-optout");
@@ -27,7 +28,10 @@ function applyPreference(value) {
   } else {
     document.documentElement.dataset.theme = value;
   }
-  themeSelect.value = value;
+  themeMenu.dataset.current = value;
+  themeOptions.forEach((option) => {
+    option.setAttribute("aria-pressed", String(option.dataset.themeOption === value));
+  });
 }
 
 applyPreference(preference);
@@ -42,15 +46,45 @@ splashNowLine.replaceChildren();
   splashNowLine.append(characterElement);
 });
 
-themeSelect.addEventListener("change", () => {
-  preference = themeSelect.value;
-  applyPreference(preference);
-  try {
-    localStorage.setItem(savedPreferenceKey, preference);
-  } catch {
-    // The selected theme still applies for this page view.
-  }
+themeOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    preference = option.dataset.themeOption;
+    applyPreference(preference);
+    try {
+      localStorage.setItem(savedPreferenceKey, preference);
+    } catch {
+      // The selected theme still applies for this page view.
+    }
+  });
 });
+
+const navLinks = [...document.querySelectorAll("nav a")];
+const navSections = navLinks.map((link) => document.querySelector(link.getAttribute("href")));
+
+function updateActiveNav() {
+  const line = window.innerHeight * 0.35;
+  let current = 0;
+  navSections.forEach((section, index) => {
+    if (section.getBoundingClientRect().top <= line) current = index;
+  });
+  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+    current = navSections.length - 1;
+  }
+  navLinks.forEach((link, index) => {
+    link.classList.toggle("is-active", index === current);
+    if (index === current) link.setAttribute("aria-current", "true");
+    else link.removeAttribute("aria-current");
+  });
+  const nav = navLinks[0].parentElement;
+  if (nav.scrollWidth > nav.clientWidth) {
+    const link = navLinks[current];
+    nav.scrollLeft = link.offsetLeft - (nav.clientWidth - link.offsetWidth) / 2;
+  }
+}
+
+window.addEventListener("scroll", updateActiveNav, { passive: true });
+window.addEventListener("resize", updateActiveNav);
+updateActiveNav();
 
 try {
   if (localStorage.getItem(splashSeenKey) !== "true") {
