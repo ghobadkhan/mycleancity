@@ -1,0 +1,41 @@
+<dialog
+  #campaignSplash
+  class="campaign-splash"
+  aria-labelledby="splash-title"
+  (close)="onSplashClosed()"
+>
+  <figure class="splash-photo">
+    @for (slide of splashSlides; track slide.src; let index = $index) {
+      <img
+        class="splash-slide"
+        [class.is-active]="index === activeSlide()"
+        [src]="slide.src"
+        [alt]="slide.alt"
+        [attr.aria-hidden]="index === activeSlide() ? null : 'true'"
+        [attr.fetchpriority]="index === 0 ? 'high' : null"
+      >
+    }
+  </figure>
+  <div class="splash-shade" aria-hidden="true"></div>
+  <button class="splash-close" type="button" aria-label="Close campaign message" (click)="closeSplash()">×</button>
+  <div class="splash-content">
+    <h2
+      class="splash-headline"
+      [class.is-transformed]="isHeadlineTransformed()"
+      id="splash-title"
+      aria-label="This is your city right now!"
+    >
+      <span class="splash-headline-line">This is</span>
+      <span class="splash-headline-line splash-future-line"><span>the future</span></span>
+      <span class="splash-headline-line splash-city-line"><span class="splash-of">of </span>your city<span class="splash-exclamation">!</span></span>
+      <span class="splash-headline-line splash-now-line" aria-hidden="true">
+        @for (character of splashCharacters; track $index) {
+          <span class="splash-now-character" [style.transitionDelay.ms]="prefersReducedMotion ? 0 : $index * 480">{{ character === " " ? "\u00a0" : character }}</span>
+        }
+      </span>
+    </h2>
+    <div class="splash-actions">
+      <label class="splash-optout"><input #splashOptout type="checkbox"> Don't show this again</label>
+    </div>
+  </div>
+</dialog>
