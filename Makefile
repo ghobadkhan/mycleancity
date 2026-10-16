@@ -3,11 +3,12 @@ NODE_VERSION ?= 24
 NVM_VERSION  ?= v0.40.3
 NVM_DIR      ?= $(HOME)/.nvm
 PORT         ?= 4200
+HOST         ?= 127.0.0.1
 
 # Load nvm (if installed) before each command so node/npm resolve correctly
 NVM_LOAD = export NVM_DIR="$(NVM_DIR)"; [ -s "$$NVM_DIR/nvm.sh" ] && . "$$NVM_DIR/nvm.sh";
 
-.PHONY: help all setup install-node install dev serve build clean distclean
+.PHONY: help all serve-vm setup install-node install dev serve build clean distclean
 
 help:
 	@echo "Targets:"
@@ -37,7 +38,7 @@ install:
 	@$(NVM_LOAD) npm ci
 
 dev serve:
-	@$(NVM_LOAD) npx ng serve --port $(PORT)
+	@$(NVM_LOAD) npx ng serve --host $(HOST) --port $(PORT)
 
 build:
 	@$(NVM_LOAD) npm run build
@@ -47,3 +48,7 @@ clean:
 
 distclean: clean
 	rm -rf node_modules
+
+# Expose the dev server to the network (e.g. when running inside a VM)
+serve-vm:
+	@$(MAKE) dev HOST=0.0.0.0
