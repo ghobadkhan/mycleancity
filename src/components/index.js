@@ -1,0 +1,9 @@
+import './mcc-splash.js';
+import './mcc-header.js';
+import './mcc-hero.js';
+import './mcc-issue.js';
+import './mcc-actions.js';
+import './mcc-progress.js';
+import './mcc-goal.js';
+import './mcc-contact.js';
+import './mcc-footer.js';

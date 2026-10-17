@@ -21,7 +21,7 @@ We are based in Greater Toronto Area and naturally our focus is primary GTA. But
 - The website is single page for now. But the framework that's used should have enough flexibility to extent to multiple pages.
 
 - Fast loading time and responsive design should be paramount.
-- The page shell and HTML partials in `src/` are the source of truth. Root `index.html` is generated; run `npm run build` after source markup changes and before serving or publishing.
+- The site is built with Lit web components, server-rendered to static HTML with Lit SSR (`@lit-labs/ssr`) and hydrated in the browser with `@lit-labs/ssr-client`. Components and the page template in `src/` are the source of truth. `dist/` is generated; run `npm run build` after source changes and before serving or publishing.
 
 ## SEO
 
@@ -29,4 +29,4 @@ Try to suggest/implement elements that make the website as SEO friendly as possi
 
 ## Serving
 
-Run `npm run build`, then use `livereload -p 8000` from the local virtual environment to serve the generated webpage.
+Run `npm run build`, then use `livereload -p 8000 dist` from the local virtual environment to serve the generated webpage. Deployment to cPanel is described in `README.md`.

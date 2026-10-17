@@ -1,24 +1,32 @@
-import { readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { rollup } from 'rollup';
+import { render } from '@lit-labs/ssr';
+import { collectResult } from '@lit-labs/ssr/lib/render-result.js';
+import rollupConfig from '../rollup.config.js';
+import '../src/components/index.js';
+import { page as indexPage } from '../src/pages/index.js';
 
-const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const sourceDirectory = resolve(projectRoot, "src");
-const templatePath = resolve(sourceDirectory, "index.html");
-const outputPath = resolve(projectRoot, "index.html");
-const includePattern = /^([ \t]*)<!-- include: (partials\/[a-z0-9-]+\.html) -->$/gm;
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const dist = resolve(root, 'dist');
 
-let html = await readFile(templatePath, "utf8");
-const includes = [...html.matchAll(includePattern)];
+// Output file name -> Lit template. Add an entry to add a page.
+const pages = { 'index.html': indexPage };
 
-for (const [directive, , partialPath] of includes) {
-  const content = await readFile(resolve(sourceDirectory, partialPath), "utf8");
-  html = html.replace(directive, content.trimEnd());
+await rm(dist, { recursive: true, force: true });
+await mkdir(dist, { recursive: true });
+
+const bundle = await rollup(rollupConfig);
+await bundle.write(rollupConfig.output);
+await bundle.close();
+
+for (const [fileName, template] of Object.entries(pages)) {
+  const html = await collectResult(render(template));
+  await writeFile(resolve(dist, fileName), html);
 }
 
-if (includePattern.test(html)) {
-  throw new Error(`Unresolved HTML partial include in ${templatePath}`);
-}
+await cp(resolve(root, 'src/styles/global.css'), resolve(dist, 'styles.css'));
+await cp(resolve(root, 'assets'), resolve(dist, 'assets'), { recursive: true });
 
-await writeFile(outputPath, html);
-console.log(`Built ${outputPath}`);
+console.log(`Built ${dist}`);

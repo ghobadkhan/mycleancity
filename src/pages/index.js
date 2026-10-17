@@ -1,4 +1,6 @@
-<!doctype html>
+import { html } from 'lit';
+
+export const page = html`<!doctype html>
 <html lang="en-CA">
   <head>
     <meta charset="utf-8">
@@ -10,27 +12,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script type="module" src="client.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <!-- include: partials/campaign-splash.html -->
-    <!-- include: partials/site-header.html -->
-
+    <mcc-splash></mcc-splash>
+    <mcc-header></mcc-header>
     <main id="main">
-      <!-- include: partials/hero.html -->
-
-      <!-- include: partials/issue.html -->
-
-      <!-- include: partials/actions.html -->
-
-      <!-- include: partials/progress.html -->
-
-      <!-- include: partials/goal.html -->
-
-      <!-- include: partials/contact.html -->
+      <mcc-hero id="top"></mcc-hero>
+      <mcc-issue id="why"></mcc-issue>
+      <mcc-actions id="actions"></mcc-actions>
+      <mcc-progress id="progress"></mcc-progress>
+      <mcc-goal id="goal"></mcc-goal>
+      <mcc-contact id="contact"></mcc-contact>
     </main>
-
-    <!-- include: partials/site-footer.html -->
-    <script src="theme.js" defer></script>
+    <mcc-footer></mcc-footer>
   </body>
-</html>
+</html>`;
