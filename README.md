@@ -60,7 +60,7 @@ Open [http://localhost:8000](http://localhost:8000). Press `Ctrl+C` to stop the 
 - **New component**: create `src/components/mcc-name.js`, register it with `customElements.define`, and add it to `src/components/index.js`.
 - **New page**: create a template in `src/pages/` and add it to the `pages` map in `scripts/build.mjs`.
 
-Put campaign images in `assets/` and reference them relative to the site root. `dist/` is generated; do not edit it.
+Put campaign images in `assets/` and reference them as `assets/...`; the build publishes them under `landing/assets/`. `dist/` is generated; do not edit it.
 
 Before publishing, replace the clearly marked statistics and contact placeholders with verified information and destinations.
 
@@ -75,7 +75,7 @@ npm install
 npm run build
 ```
 
-`dist/` should now contain `index.html`, `client.js`, `styles.css`, and `assets/`.
+`dist/` should now contain `index.html` and a `landing/` folder holding `client.js`, `styles.css`, `assets/`, and `splash/`.
 
 ### 2. Create a zip of the output
 
@@ -103,7 +103,7 @@ Alternatively, upload the contents of `dist/` to the document root with an FTP c
 
 Open your domain in a browser. Confirm that:
 
-- `index.html`, `client.js`, `styles.css`, and `assets/` sit directly in the document root, not inside a `dist/` subfolder.
+- `index.html` and `landing/` sit directly in the document root, not inside a `dist/` subfolder.
 - The splash photos load and the page is styled.
 - The theme menu works.
 
@@ -132,6 +132,6 @@ Rebuild, delete the old files in the document root (or overwrite them), and uplo
 
 ### Troubleshooting
 
-- **Blank or unstyled page**: `styles.css`/`client.js` were uploaded to the wrong folder. They must sit next to `index.html`.
+- **Blank or unstyled page**: `landing/` was not uploaded or was uploaded to the wrong folder. It must sit next to `index.html`.
 - **A directory listing or 403 instead of the page**: `index.html` is not in the document root, or the file permissions are not the cPanel default (`0644` for files).
 - **Nothing happens on interaction**: open the browser developer tools and check the console and network tabs for a failed `client.js` request.

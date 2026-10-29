@@ -28,16 +28,15 @@ export class MccProgress extends LitElement {
   render() {
     return html`
       <section class="progress section-wrap" aria-labelledby="progress-title">
-        <div class="section-label"><span>03</span><span>Our progress</span></div>
+        <div class="section-label"><span>Our progress</span></div>
         <div class="progress-content">
           <h2 id="progress-title">Show the work.<br><span>Count what changes.</span></h2>
           <div class="progress-details">
             <p>Community effort should be measured honestly. Add confirmed campaign results here when they’re ready to share.</p>
             <div class="progress-metrics">
-              <div><strong>[Add total]</strong><span>Verified cleanups or actions</span></div>
-              <div><strong>[Add total]</strong><span>Verified community participants</span></div>
+              <div><strong>TBA</strong><span>Verified cleanups or actions</span></div>
+              <div><strong>TBA</strong><span>Verified community participants</span></div>
             </div>
-            <p class="small-note">Only publish figures with a clear source and date.</p>
           </div>
         </div>
       </section>

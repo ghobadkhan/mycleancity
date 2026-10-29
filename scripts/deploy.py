@@ -42,16 +42,40 @@ def main() -> int:
         print(f"{source}/index.html not found. Run `npm run build` first.", file=sys.stderr)
         return 1
 
+    remote_dir = shlex.quote(args.remote_dir)
+    if args.remote_dir.strip().rstrip("/") in ("", ".", "..", "~"):
+        print(f"Refusing to use unsafe remote dir: {args.remote_dir!r}", file=sys.stderr)
+        return 1
+
+    names = sorted(p.name for p in source.iterdir())
+    base = args.remote_dir.rstrip("/")
+    probe = "; ".join(f"[ -e {shlex.quote(f'{base}/{n}')} ] && echo {shlex.quote(n)}" for n in names)
+    result = subprocess.run(
+        ["ssh", "-p", args.port, args.target, f"{probe}; true"], capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        print(f"Could not check remote directory (ssh failed):\n{result.stderr}", file=sys.stderr)
+        return 1
+    existing = [n for n in result.stdout.splitlines() if n in names]
+    if existing:
+        print(f"These items already exist in {args.target}:{args.remote_dir}:")
+        for n in existing:
+            print(f"  {n}")
+        answer = input("Remove them before deploying? [y/N] ")
+        if answer.strip().lower() not in ("y", "yes"):
+            print("Aborted.")
+            return 1
+
     remote_zip = "mcc-site.zip"
     with tempfile.TemporaryDirectory() as tmp:
         archive = Path(tmp) / remote_zip
         make_zip(source, archive)
         run(["scp", "-P", args.port, str(archive), f"{args.target}:{remote_zip}"])
 
-    remote_dir = shlex.quote(args.remote_dir)
     remote_cmd = (
         f"mkdir -p {remote_dir} && "
-        f"unzip -o {remote_zip} -d {remote_dir} && "
+        + "".join(f"rm -rf {shlex.quote(f'{base}/{n}')} && " for n in existing)
+        + f"unzip -o {remote_zip} -d {remote_dir} && "
         f"rm {remote_zip}"
     )
     run(["ssh", "-p", args.port, args.target, remote_cmd])

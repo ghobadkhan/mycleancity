@@ -3,6 +3,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { baseStyles } from '../styles/shared.js';
 
 const seenKey = 'my-clean-city-splash-dismissed';
+const sessionKey = 'my-clean-city-splash-seen';
 const typedText = 'right now!';
 
 const slides = [
@@ -20,21 +21,15 @@ export class MccSplash extends LitElement {
   static styles = [
     baseStyles,
     css`
-      dialog {
-        position: fixed;
-        width: 100vw;
-        max-width: none;
+      .splash {
+        position: relative;
+        width: 100%;
         height: 100vh;
-        max-height: none;
-        margin: 0;
-        padding: 0;
         overflow: hidden;
-        border: 0;
         background: #17231f;
         color: #fffef9;
       }
 
-      dialog::backdrop { background: rgba(8, 13, 10, 0.88); }
       .splash-photo { position: absolute; inset: 0; margin: 0; }
       .splash-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; opacity: 0; transition: opacity 2s ease; }
       .splash-photo img.is-active { opacity: 1; }
@@ -66,7 +61,7 @@ export class MccSplash extends LitElement {
       .splash-optout input { width: 18px; height: 18px; accent-color: var(--lime); }
 
       @media (max-width: 720px) {
-        dialog { height: 100dvh; }
+        .splash { height: 100dvh; }
         .splash-photo img { object-position: 57% center; }
         .splash-shade { background: linear-gradient(0deg, rgba(9, 17, 13, 0.9), rgba(9, 17, 13, 0.58) 54%, rgba(9, 17, 13, 0.22)); }
         .splash-close { top: 16px; right: 20px; }
@@ -93,17 +88,6 @@ export class MccSplash extends LitElement {
   }
 
   firstUpdated() {
-    let seen = false;
-    try {
-      seen = localStorage.getItem(seenKey) === 'true';
-    } catch {
-      // Show the splash when browser storage is unavailable.
-    }
-    if (seen) return;
-
-    const dialog = this.renderRoot.querySelector('dialog');
-    dialog.showModal();
-
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       this._transformed = true;
       return;
@@ -122,22 +106,19 @@ export class MccSplash extends LitElement {
   }
 
   _close() {
-    this.renderRoot.querySelector('dialog').close();
-  }
-
-  _onClose() {
     this._stopTimers();
-    if (!this.renderRoot.querySelector('#splash-optout').checked) return;
     try {
-      localStorage.setItem(seenKey, 'true');
+      sessionStorage.setItem(sessionKey, 'true');
+      if (this.renderRoot.querySelector('#splash-optout').checked) localStorage.setItem(seenKey, 'true');
     } catch {
-      // The splash can still be dismissed for this page view.
+      // Navigation to the home page still works when browser storage is unavailable.
     }
+    window.location.assign(new URL('../', document.baseURI));
   }
 
   render() {
     return html`
-      <dialog aria-labelledby="splash-title" @close=${this._onClose}>
+      <section class="splash" aria-labelledby="splash-title">
         <figure class="splash-photo">
           ${slides.map(
             (slide, index) => html`<img
@@ -164,7 +145,7 @@ export class MccSplash extends LitElement {
             <label class="splash-optout"><input id="splash-optout" type="checkbox"> Don't show this again</label>
           </div>
         </div>
-      </dialog>
+      </section>
     `;
   }
 }

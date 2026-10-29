@@ -8,7 +8,8 @@ export class MccHero extends LitElement {
     css`
       .hero {
         position: relative;
-        min-height: min(690px, calc(100svh - 78px));
+        min-height: 100vh;
+        min-height: 100svh;
         display: flex;
         align-items: center;
         overflow: hidden;
@@ -51,7 +52,7 @@ export class MccHero extends LitElement {
       .hero-note { position: absolute; right: 6.2%; bottom: 22px; z-index: 1; margin: 0; font-size: 11px; }
 
       @media (max-width: 720px) {
-        .hero { min-height: 620px; min-height: min(720px, calc(100svh - 68px)); padding: 68px 24px 80px; background-position: 58% center; }
+        .hero { padding: 68px 24px 80px; background-position: 58% center; }
         h1 { font-size: clamp(49px, 12vw, 68px); }
         .hero-copy { font-size: 15px; }
         .hero-note { right: 24px; bottom: 18px; }

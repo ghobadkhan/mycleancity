@@ -12,6 +12,7 @@
   --copy: #414c45;
   --band-bg: #17231f;
   --band-text: #fffef9;
+  --header-bg: #d2d281;
   font-family: "DM Sans", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,6 +31,7 @@
     --copy: #c5cec6;
     --band-bg: #202b25;
     --band-text: #fffef9;
+    --header-bg: #47472f;
   }
 }
 
@@ -49,6 +51,7 @@
   --copy: #c5cec6;
   --band-bg: #202b25;
   --band-text: #fffef9;
+  --header-bg: #47472f;
 }
 
 html { scroll-behavior: smooth; scroll-padding-top: 78px; }

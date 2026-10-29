@@ -3,6 +3,6 @@ import terser from '@rollup/plugin-terser';
 
 export default {
   input: 'src/client.js',
-  output: { file: 'dist/client.js', format: 'es' },
+  output: { file: 'dist/landing/client.js', format: 'es' },
   plugins: [nodeResolve(), terser()],
 };

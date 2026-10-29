@@ -41,7 +41,7 @@ export class MccIssue extends LitElement {
   render() {
     return html`
       <section class="issue section-wrap" aria-labelledby="issue-title">
-        <div class="section-label"><span>01</span><span>The issue</span></div>
+        <div class="section-label"><span>The issue</span></div>
         <div class="issue-grid">
           <h2 id="issue-title">Litter is a small act.<br><span>So is stopping it.</span></h2>
           <div class="issue-copy">

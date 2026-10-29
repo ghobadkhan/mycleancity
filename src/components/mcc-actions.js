@@ -51,7 +51,7 @@ export class MccActions extends LitElement {
     return html`
       <section class="action-band" aria-labelledby="actions-title">
         <div class="section-wrap action-inner">
-          <div class="section-label"><span>02</span><span>How we help</span></div>
+          <div class="section-label"><span>How we help</span></div>
           <div class="action-heading">
             <h2 id="actions-title">Keep it off<br>the street.</h2>
             <p>Cleaner blocks are built from ordinary choices, made by all of us.</p>
